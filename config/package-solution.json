@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "spfx-gestor-incidencias",
+    "id": "e5cc3d77-ee8a-4373-80de-83ad5956d711",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "fakumax",
+      "websiteUrl": "https://github.com/fakumax",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": ""
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "Gestión de incidencias operativas y acciones correctivas"
+      },
+      "longDescription": {
+        "default": "Webpart SPFx para gestión de incidencias operativas, acciones correctivas/preventivas, equipos y responsables. Desarrollado con React, PnPjs y Fluent UI para SharePoint Online."
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "Gestor de Incidencias",
+        "description": "Gestión de incidencias operativas, acciones correctivas y seguimiento de responsables.",
+        "id": "47e95274-fb2c-4b4d-8f8d-6cced9247da5",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/gestor-incidencias.sppkg"
+  }
+}

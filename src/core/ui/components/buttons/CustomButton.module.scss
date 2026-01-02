@@ -1,0 +1,197 @@
+@import "../../scss/variables";
+
+.button {
+  padding: $button-padding;
+  border-radius: $button-border-radius;
+  font-size: $button-font-size;
+  transition: $button-transition;
+  border: 1px solid transparent;
+
+  :global(.ms-Button-flexContainer) {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+
+  // Variantes de color
+  &.bluePrimary {
+    background-color: $blue-primary;
+    color: $text-light;
+    border-color: $blue-primary;
+
+    &:hover {
+      background-color: $blue-primary-hover;
+    }
+
+    &.outline {
+      background-color: transparent;
+      color: $blue-primary;
+
+      &:hover {
+        background-color: $blue-primary;
+        color: $text-light;
+      }
+    }
+  }
+
+  &.blueSecondary {
+    background-color: $blue-secondary;
+    color: $text-light;
+    border-color: $blue-secondary;
+
+    &:hover {
+      background-color: $blue-secondary-hover;
+    }
+
+    &.outline {
+      background-color: transparent;
+      color: $blue-secondary;
+
+      &:hover {
+        background-color: $blue-secondary;
+        color: $text-light;
+      }
+    }
+  }
+
+  &.blueDark {
+    background-color: $blue-dark;
+    color: $text-light;
+    border-color: $blue-dark;
+
+    &:hover {
+      background-color: $blue-dark-hover;
+    }
+
+    &.outline {
+      background-color: transparent;
+      color: $blue-dark;
+
+      &:hover {
+        background-color: $blue-dark;
+        color: $text-light;
+      }
+    }
+  }
+
+  &.green {
+    background-color: $green;
+    color: $text-light;
+    border-color: $green;
+
+    &:hover {
+      background-color: $green-hover;
+    }
+
+    &.outline {
+      background-color: transparent;
+      color: $green;
+
+      &:hover {
+        background-color: $green;
+        color: $text-light;
+      }
+    }
+  }
+
+  &.redDark {
+    background-color: $red-dark;
+    color: $text-light;
+    border-color: $red-dark;
+
+    &:hover {
+      background-color: $red-dark-hover;
+    }
+
+    &.outline {
+      background-color: transparent;
+      color: $red-dark;
+
+      &:hover {
+        background-color: $red-dark;
+        color: $text-light;
+      }
+    }
+  }
+
+  &.greenDark {
+    background-color: $green-dark;
+    color: $text-light;
+    border-color: $green-dark;
+
+    &:hover {
+      background-color: $green-dark-hover;
+    }
+
+    &.outline {
+      background-color: transparent;
+      color: $green-dark;
+
+      &:hover {
+        background-color: $green-dark;
+        color: $text-light;
+      }
+    }
+  }
+
+  &.greyDark {
+    background-color: $grey-dark;
+    color: $text-light;
+    border-color: $grey-dark;
+
+    &:hover {
+      background-color: $grey-dark-hover;
+    }
+
+    &.outline {
+      background-color: transparent;
+      color: $grey-dark;
+
+      &:hover {
+        background-color: $grey-dark;
+        color: $text-light;
+      }
+    }
+  }
+
+  &.purple {
+    background-color: $purple;
+    color: $text-light;
+    border-color: $purple;
+
+    &:hover {
+      background-color: $purple-hover;
+    }
+
+    &.outline {
+      background-color: transparent;
+      color: $purple;
+
+      .icon {
+        filter: invert(55%) sepia(77%) saturate(4434%) brightness(101%) contrast(41%) hue-rotate(249deg)
+      }
+
+      &:hover {
+        background-color: $purple;
+        color: $text-light;
+
+        .icon {
+          filter: brightness(0) invert(1)
+        }
+      }
+    }
+  }
+
+  .icon {
+    width: 20px;
+    height: 20px;
+
+    &.iconLeft {
+      margin-right: 0;
+    }
+
+    &.iconRight {
+      margin-left: 0;
+    }
+  }
+}

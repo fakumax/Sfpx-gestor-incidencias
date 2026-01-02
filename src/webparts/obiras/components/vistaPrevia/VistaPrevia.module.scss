@@ -1,0 +1,87 @@
+.gallery {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  width: 100%;
+}
+
+.imgCard {
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+}
+
+.imgCardInner {
+  padding: 40px 20px;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  min-height: 0;
+}
+
+.imgViewport {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.caption {
+  padding: 8px 10px;
+  text-align: center;
+  font-family: "Segoe UI", "Segoe UI Variable", -apple-system, system-ui,
+    "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #323130;
+  background: linear-gradient(to top, rgba(255, 255, 255, .95), rgba(255, 255, 255, .65));
+  border-top: 1px solid #eee;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+@media (max-width: 1024px) {
+  .gallery {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .gallery {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+}
+
+.imgLink {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.imgLink:focus-visible {
+  outline: 2px solid #0078d4;
+  outline-offset: 2px;
+}

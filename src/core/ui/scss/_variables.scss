@@ -1,0 +1,34 @@
+// Colors - Paleta de colores
+$blue-primary: #2d6ee2;
+$blue-secondary: #029fd3;
+$blue-dark: #01225e;
+$green: #00bf6e;
+$purple: #926db4;
+$orange: #d36c00;
+$grey: #dfe2f1;
+$red-dark: #dc3545;
+$grey-dark: #6c757d;
+$green-dark: #00bf6e;
+
+// Text Colors
+$text-light: #fff;
+$text-dark: #323130;
+
+// Button styles
+$button-padding: 8px 16px;
+$button-border-radius: 4px;
+$button-border-radius-big: 8px;
+$button-font-size: 14px;
+$button-transition: all 0.2s ease-in-out;
+
+// Hover states - calculados automáticamente
+$blue-primary-hover: darken($blue-primary, 10%);
+$blue-secondary-hover: darken($blue-secondary, 10%);
+$blue-dark-hover: darken($blue-dark, 10%);
+$red-dark-hover: darken($red-dark, 10%);
+$grey-dark-hover: darken($grey-dark, 10%);
+$green-dark-hover: darken($green-dark, 10%);
+$green-hover: darken($green, 10%);
+$purple-hover: darken($purple, 10%);
+$orange-hover: darken($orange, 10%);
+$grey-hover: darken($grey-dark, 10%);

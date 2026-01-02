@@ -1,0 +1,121 @@
+@import "../../../../../core/ui/scss/variables";
+
+.stack {
+  padding: 20px;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.header {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2rem;
+}
+
+.containerStack {
+  width: 100%;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 300;
+  color: $blue-dark;
+}
+
+.required {
+  color: #a4262c;
+  margin-right: 4px;
+  font-weight: 600;
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.gridContainer > * {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.simpleColumn {
+  grid-column: span 1;
+}
+
+.doubleColumn {
+  grid-column: span 2;
+}
+
+.tripleColumn {
+  grid-column: span 3;
+}
+
+.fullWidth {
+  grid-column: span 4;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formGroup > * {
+  width: 100%;
+}
+
+.formContainer {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.labelField {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(50, 49, 48);
+  padding: 5px 0px;
+}
+
+.requiredAsterisk {
+  color: #a4262c;
+  margin-left: 2px;
+  font-weight: 600;
+}
+.labelFieldContainer {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+}
+
+.padInputWhite {
+  background: #fff !important;
+}
+
+:global(.ms-DatePicker) {
+  :global(.ms-TextField-fieldGroup) {
+    border: 1px solid rgb(96, 94, 92);
+    transition: border-color 0.2s ease;
+  }
+
+  :global(.ms-TextField-fieldGroup:focus-within) {
+    border-color: rgb(0, 120, 212) !important;
+  }
+
+  :global(.ms-TextField-fieldGroup:hover:not(:focus-within)) {
+    border-color: rgb(50, 49, 48);
+  }
+}
+
+.datePickerError {
+  :global(.ms-TextField-fieldGroup) {
+    &:not(:focus-within) {
+      border-color: #a4262c !important;
+    }
+  }
+}

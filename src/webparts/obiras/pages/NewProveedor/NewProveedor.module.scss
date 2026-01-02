@@ -1,0 +1,12 @@
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 80px;
+}
+
+.filesComponent {
+    display: flex;
+    flex-direction: column;
+    margin-top: 27px;
+}

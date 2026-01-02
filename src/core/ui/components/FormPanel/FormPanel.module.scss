@@ -1,0 +1,94 @@
+@import "~@fluentui/react/dist/sass/References.scss";
+
+.formPanel {
+  @include ms-Grid;
+
+  .row {
+    @include ms-Grid-row;
+    padding: 30px;
+
+    .column {
+      @include ms-Grid-col;
+      @include ms-sm12;
+      margin-bottom: 15px;
+    }
+  }
+
+  :global(.ms-Panel-main) {
+    width: 100% !important;
+
+    @include ms-screen-md-up {
+      width: 100% !important;
+    }
+
+    @include ms-screen-lg-up {
+      width: 600px !important;
+    }
+  }
+
+  :global(.ms-Panel-navigation) {
+    display: flex;
+    justify-content: space-between;
+    padding: 0em 4em;
+  }
+
+  :global(.ms-Panel-commands) {
+    margin-top: 2em;
+  }
+
+  :global(.ms-Panel-header) {
+    background-color: $ms-color-themeDarkAlt;
+    font-family: "DIN", Arial, sans-serif !important;
+    margin: 0;
+    position: relative;
+    z-index: 200;
+    text-transform: uppercase;
+    align-self: normal;
+  }
+
+  :global(.ms-Panel-headerText) {
+    background-color: $ms-color-themeDarkAlt;
+    font-family: "DIN", Arial, sans-serif !important;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 15px;
+    color: $ms-color-neutralLighter;
+    font-weight: 400;
+
+    @include ms-screen-md-up {
+      padding-bottom: 30px;
+    }
+  }
+
+  :global(.ms-Panel-content) {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  :global(.ms-Panel-footerInner) {
+    background-color: #fff;
+    position: relative;
+    z-index: 300;
+  }
+
+  :global(.ms-Panel-closeButton:hover),
+  :global(.ms-Panel-closeButton:active) {
+    background: none;
+  }
+
+  :global(.ms-Button-flexContainer) {
+    color: #323130;
+  }
+
+  :global(.ms-Button-label) {
+    margin: 13px 0;
+  }
+
+  .rightButton {
+    margin-left: 15px;
+
+    :global(.ms-Button-textContainer) {
+      color: $ms-color-neutralDark;
+    }
+  }
+}

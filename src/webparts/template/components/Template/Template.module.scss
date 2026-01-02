@@ -1,0 +1,63 @@
+@import "~@fluentui/react/dist/sass/References.scss";
+@import "../../../../core/ui/scss/variables";
+
+.template {
+  /*.fade {
+		@include ms-fadeIn500;
+	}*/
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .section {
+    margin-bottom: 32px;
+    padding: 24px;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+  }
+
+  .sectionTitle {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: $text-dark;
+  }
+
+  .buttonGroup {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+
+    > * {
+      margin-bottom: 8px;
+    }
+  }
+
+  .inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 400px;
+
+    > * {
+      width: 100%;
+    }
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -8px;
+  }
+
+  .column {
+    flex: 1;
+    padding: 0 8px;
+    min-width: 280px;
+  }
+}

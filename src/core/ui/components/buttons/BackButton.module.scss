@@ -1,0 +1,33 @@
+@import "../../scss/variables";
+
+.backButton {
+  background: transparent !important;
+  border: none !important;
+  padding: 8px !important;
+
+  :global(.ms-Button-flexContainer) {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+
+  &:hover {
+    background: transparent !important;
+    .text,
+    .icon {
+      color: $blue-secondary-hover !important;
+      filter: brightness(0.9);
+    }
+  }
+
+  .text {
+    font-size: 16px !important;
+    font-weight: 300 !important;
+    color: $blue-secondary !important;
+  }
+
+  .icon {
+    width: 20px;
+    height: 20px;
+  }
+}

@@ -1,0 +1,36 @@
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
+
+:global {
+  // Ocultar header del sitio y barra de comandos
+  div[data-sp-feature-tag="Site header host"],
+  #spCommandBar,
+  .commandBarWrapper,
+  [class*="ar_f_"],
+  [role="region"][aria-label="Barra de comandos"],
+  #sp-appBar,
+  .sp-appBar {
+    display: none !important;
+  }
+
+  // Mantener visible pero ajustar el contenedor principal
+  .SPCanvas {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  // Ajustar zona de contenido
+  .CanvasZone {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  // Asegurar que el contenido de la webpart sea visible
+  [class*="centerContent"],
+  .ControlZone {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}

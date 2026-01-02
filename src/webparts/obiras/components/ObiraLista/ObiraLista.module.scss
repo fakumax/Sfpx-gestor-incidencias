@@ -1,0 +1,50 @@
+@import "~@fluentui/react/dist/sass/References.scss";
+@import "../../../../core/ui/scss/variables";
+
+.stack {
+  width: 100%;
+  padding: 20px;
+}
+
+.containerStack {
+  width: 90%;
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: white;
+  padding: 10px 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 2rem;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 300;
+  color: $blue-dark;
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.error {
+  color: #a4262c;
+}
+
+.loading {
+  color: #0078d4;
+}
+
+.lastClickedRow {
+  background-color: #a4262c;
+}

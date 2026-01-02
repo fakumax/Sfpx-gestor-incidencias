@@ -1,0 +1,28 @@
+.fileComponentContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.uploadSection {
+  grid-column: 1;
+}
+
+.filesList {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
+  :global {
+    .ms-DetailsHeader {
+      padding-top: 8px;
+    }
+
+    .ms-DetailsRow {
+      &:hover {
+        background: #f0f0f0;
+      }
+    }
+  }
+}
