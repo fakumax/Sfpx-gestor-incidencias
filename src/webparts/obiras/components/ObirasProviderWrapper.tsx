@@ -16,7 +16,7 @@ export interface IObirasProviderProps {
   userGroup: string;
   userRole: Roles;
   tableroBIData: string;
-  sendEmailObj?:ISendEmailConfig
+  sendEmailObj?: ISendEmailConfig;
 }
 
 const ObirasProviderWrapper: React.FC<IObirasProviderProps> = ({

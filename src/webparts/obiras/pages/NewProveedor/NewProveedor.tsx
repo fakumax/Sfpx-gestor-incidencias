@@ -785,7 +785,7 @@ const NewProveedor: React.FC<INewProveedorProps> = (props) => {
             onChange={handleChange}
             onBlur={handleBlur}
             onKeyDown={handleKeyDown}
-            placeholder="Ejemplo: 'ARENAS_YPF'"
+            placeholder="Ejemplo: 'SERVICIOS_NORTE'"
             maxLength={maximaLongitudPermitida}
             styles={{
               fieldGroup: {

@@ -25,6 +25,7 @@ import ObiraDataSource from "../../../../core/api/Obira/ObiraDataSource";
 import { Accion, ESTADO_ITEM, ESTADOS_GENERALES_DEFAULT, Lista, Roles } from "../../../../core/utils/Constants";
 import { useUserContext } from "../../../../core/context/UserContext";
 import { WebPartContext } from "@microsoft/sp-webpart-base";
+import { getDatasource, ObiraMock } from "../../../../core/mock";
 
 import checkCelesteIcon from "../../../../core/ui/icons/checkCelesteIcon.svg";
 import flechaAzulIcon from "../../../../core/ui/icons/FlechaAzulIcon.svg";
@@ -113,7 +114,16 @@ const ObiraLista: React.FC<ObiraListaProps> = ({ context }) => {
     setLoading(true);
     try {
       const filtroDeItems: string = `Activo eq ${estadoItems}`;
-      const obiraDatasource = new ObiraDataSource(listasAsociadas.obiras);
+      
+      // Obtener el nombre del proveedor desde la URL
+      const nombreProveedor = proveedorNombre 
+        ? decodeURIComponent(proveedorNombre).replace(/-/g, " ").toUpperCase()
+        : "";
+      
+      const obiraDatasource = getDatasource(
+        new ObiraDataSource(listasAsociadas.obiras),
+        new ObiraMock(nombreProveedor)
+      );
       const obirasData = await obiraDatasource.getFilteredItems(filtroDeItems);
       const items = Array.isArray(obirasData) ? obirasData : [];
       const filtrados = filtrarPorDefecto(items);

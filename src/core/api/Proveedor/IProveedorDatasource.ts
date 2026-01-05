@@ -16,6 +16,6 @@ export default interface IDatasource<TItem extends BaseEntity> {
 
     getById(itemId: number): Promise<TItem>;
 
-    getFilteredItems(filter: string): Promise<TItem[]>;
+    getFilteredItems(filter: string, orderBy?: string, ascending?: boolean): Promise<TItem[]>;
 
 }

@@ -12,6 +12,7 @@ import { ProveedorButton } from "../../../../core/ui/components/buttons/Proveedo
 import ObiraDataSource from "../../../../core/api/Obira/ObiraDataSource";
 import volverIcon from "../../../../core/ui/icons/VolverIcon.svg";
 import agregarIcon from "../../../../core/ui/icons/AgregarIcon.svg";
+import { getDatasource, ProveedorMock, ObiraMock } from "../../../../core/mock";
 
 interface ProveedorWithCount extends Proveedor {
   obirasCount: number;
@@ -58,7 +59,10 @@ const Proveedores: React.FC = () => {
 
   const cargarProveedores = async () => {
     try {
-      const proveedorDatasource = new ProveedorDatasource(Lista.Proveedores);
+      const proveedorDatasource = getDatasource(
+        new ProveedorDatasource(Lista.Proveedores),
+        new ProveedorMock()
+      );
       const proveedoresActivos = await proveedorDatasource.getFilteredItems(
         "Activo eq 1",
         "Title"
@@ -67,7 +71,10 @@ const Proveedores: React.FC = () => {
         proveedoresActivos.map(async (proveedor) => {
           let obirasCount = 0;
           if (proveedor.ListaAsociada) {
-            const obiraDatasource = new ObiraDataSource(proveedor.ListaAsociada.obiras);
+            const obiraDatasource = getDatasource(
+              new ObiraDataSource(proveedor.ListaAsociada.obiras),
+              new ObiraMock(proveedor.Title)
+            );
             const obirasActivas = await obiraDatasource.getFilteredItems("Activo eq 1");
             obirasCount = obirasActivas.length;
           }
@@ -80,6 +87,7 @@ const Proveedores: React.FC = () => {
       );
       setProveedores(proveedoresConConteos);
     } catch (err) {
+      console.error("Error cargando proveedores:", err);
       setError("Error al cargar los proveedores. Por favor, intente nuevamente.");
     } finally {
       setLoading(false);

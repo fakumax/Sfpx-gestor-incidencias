@@ -15,6 +15,7 @@ import { getSP } from "../../core/pnp/sp/pnpjs-presets";
 import { Roles, ADMIN_GROUP_NAME, CONSULTOR_GROUP_NAME } from "../../core/utils/Constants";
 import "../../core/ui/scss/global.module.scss";
 import { ISendEmailConfig } from "../../core/entities/ISendEmail";
+import { USE_MOCK_DATA, MOCK_USER_ROLE, MOCK_USER_GROUP, MOCK_USER_NAME } from "../../core/mock";
 
 export interface IObirasWebPartProps {
   description: string;
@@ -27,6 +28,28 @@ export default class ObirasWebPart extends BaseClientSideWebPart<IObirasWebPartP
   private _userGroup: string = "";
 
   public async render(): Promise<void> {
+    // ========== MODO MOCK ==========
+    if (USE_MOCK_DATA) {
+      console.log("🎮 [MODO DEMO] Usando datos mock - no se conecta a SharePoint");
+      this._userRole = Roles[MOCK_USER_ROLE as keyof typeof Roles] || Roles.Administradores;
+      this._userGroup = MOCK_USER_GROUP;
+      
+      const element: React.ReactElement<IObirasProps> = React.createElement(
+        ObirasProviderWrapper,
+        {
+          userRole: this._userRole,
+          userDisplayName: MOCK_USER_NAME,
+          userGroup: this._userGroup,
+          context: this.context,
+          tableroBIData: this.properties.tableroBIData,
+          sendEmailObj: this.properties.sendEmailObj,
+        }
+      );
+      ReactDom.render(element, this.domElement);
+      return;
+    }
+    
+    // ========== MODO SHAREPOINT ==========
     const sp = getSP();
     try {
       const userGroups = await sp.web.currentUser.groups();
