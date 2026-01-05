@@ -1,6 +1,6 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-  "id": "e5bd302b-c782-4b2d-9474-c91bc9473340",
+  "id": "a1b2c3d4-fmv1-2026-demo-gestor1ncid3nc",
   "alias": "GestorIncidenciasWebPart",
   "componentType": "WebPart",
   "version": "*",
