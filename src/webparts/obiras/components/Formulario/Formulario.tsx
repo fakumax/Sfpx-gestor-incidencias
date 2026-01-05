@@ -171,8 +171,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
     " "
   );
 
-  const isProveedorYPF =
-    proveedorNombreDecodificado.trim().toLowerCase() === "ypf";
+  const isProveedorInterno = false;
 
   const { role, isAdmin, isConsultor, group, listasAsociadas, sendEmailObj, setListasAsociadas } =
     useUserContext();
@@ -834,7 +833,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
       const newErrorsAcciones = copyAcciones.map((accion, index) => {
         let [errorsAcciones, isValid] = validateAcciones(accion);
 
-        if (isProveedorYPF) {
+        if (isProveedorInterno) {
           errorsAcciones.ResponsableSeguimiento = "";
 
           const stillHasError = Object.values(errorsAcciones).some(
@@ -866,7 +865,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
       const newErrorsAnormalidades = copyAnormalidades.map((anormalidad, index) => {
         let [errorsAcciones, isValid] = validateAnormalidades(anormalidad);
 
-        if (isProveedorYPF) {
+        if (isProveedorInterno) {
           errorsAcciones.ResponsableSeguimiento = "";
 
           const stillHasError = Object.values(errorsAcciones).some(
@@ -1223,7 +1222,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
       setAnormalidadesData(anormalidadesCleaned);
 
       const accionesEmails = getNewResponsableEmail(accionesData);
-      // Para CO004 (edición de anormalidades existentes): solo enviar al nuevo Responsable YPF Seguimiento
+      // Para CO004 (edición de anormalidades existentes): solo enviar al nuevo Responsable de Seguimiento
       const anormalidadesEditToSend = anormalidadesData.filter(
         (a) => !a.added && a.isNewResponsableSeguimiento
       );
@@ -1231,7 +1230,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
         .map((a) => a.ResponsableSeguimiento?.EMail)
         .filter((email) => !!email);
 
-      // Para CO005 (edición de acciones existentes): solo enviar al nuevo Responsable YPF Seguimiento
+      // Para CO005 (edición de acciones existentes): solo enviar al nuevo Responsable de Seguimiento
       const accionesEditToSend = accionesData.filter(
         (a) => !a.added && a.isNewResponsableSeguimiento
       );
@@ -1297,7 +1296,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
             }
           }
         }
-        if (isProveedorYPF) {
+        if (isProveedorInterno) {
           const extrasEtapa = getDestinatariosEtapa(formData.Etapa);
           destinatarioCO003.push(...extrasEtapa);
         }
@@ -1306,8 +1305,8 @@ const Formulario: React.FC<IObirasProps> = (props) => {
           .map((accion) => accion.Responsable?.EMail)
           .filter((email) => !!email);
 
-        // Emails del ResponsableSeguimiento SOLO si NO es proveedor YPF
-        const emailsResponsablesYPF = !isProveedorYPF
+        // Emails del ResponsableSeguimiento SOLO si NO es proveedor interno
+        const emailsResponsablesSeguimiento = !isProveedorInterno
           ? accionesNuevas
             .map((accion) => accion.ResponsableSeguimiento?.EMail)
             .filter((email) => !!email)
@@ -1317,7 +1316,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
           new Set([
             ...destinatarioCO003,
             ...emailsResponsables,
-            ...emailsResponsablesYPF,
+            ...emailsResponsablesSeguimiento,
           ])
         );
         if (destinatarioCO003.length > 0) {
@@ -1333,7 +1332,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
           );
         }
       }
-      if (!isProveedorYPF && anormalidadesEmails.length > 0) {
+      if (!isProveedorInterno && anormalidadesEmails.length > 0) {
         const uniqueEmails = Array.from(new Set(anormalidadesEmails));
         await sendEmailTo(
           CodigoEmail.CO004,
@@ -1346,7 +1345,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
           proveedor
         );
       }
-      if (!isProveedorYPF && accionesEditEmails.length > 0) {
+      if (!isProveedorInterno && accionesEditEmails.length > 0) {
         const uniqueEmails = Array.from(new Set(accionesEditEmails));
         await sendEmailTo(
           CodigoEmail.CO005,
@@ -2154,7 +2153,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
                                 defaultSelectedUsers={[anormalidad.Responsable?.EMail]}
                                 principalTypes={[PrincipalType.User]}
                                 resolveDelay={1000}
-                                disabled={isReadOnly || (!isProveedorYPF && !anormalidadesData[index].added)}
+                                disabled={isReadOnly || (!isProveedorInterno && !anormalidadesData[index].added)}
                               />
                               {errorsAnormalidades &&
                                 errorsAnormalidades[index]?.Responsable && (
@@ -2213,11 +2212,11 @@ const Formulario: React.FC<IObirasProps> = (props) => {
                                   </span>
                                 )}
                             </div>
-                            {!isProveedorYPF && (
+                            {!isProveedorInterno && (
                               <div className={styles.labelFieldContainer}>
                                 <label className={styles.labelField}>
                                   <span className={styles.requiredAsterisk}>* </span>
-                                  Responsable YPF Seguimiento
+                                  Responsable de Seguimiento
                                 </label>
                                 <PeoplePicker
                                   context={peoplePickerContext}
@@ -2529,7 +2528,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
                                 defaultSelectedUsers={[accion.Responsable?.EMail]}
                                 principalTypes={[PrincipalType.User]}
                                 resolveDelay={1000}
-                                disabled={isReadOnly || (!isProveedorYPF && !accionesData[index].added)}
+                                disabled={isReadOnly || (!isProveedorInterno && !accionesData[index].added)}
                               />
                               {errorsAcciones && errorsAcciones[index]?.Responsable && (
                                 <span
@@ -2546,11 +2545,11 @@ const Formulario: React.FC<IObirasProps> = (props) => {
                           </div>
 
                           <div className={styles.gridContainer}>
-                            {!isProveedorYPF && (
+                            {!isProveedorInterno && (
                               <div className={styles.labelFieldContainer}>
                                 <label className={styles.labelField}>
                                   <span className={styles.requiredAsterisk}>* </span>
-                                  Responsable YPF Seguimiento
+                                  Responsable de Seguimiento
                                 </label>
                                 <PeoplePicker
                                   context={peoplePickerContext}

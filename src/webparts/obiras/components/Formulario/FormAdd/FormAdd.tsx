@@ -85,8 +85,7 @@ const FormAdd: React.FC<IObirasProps> = (props) => {
     " "
   );
 
-  const isProveedorInterno =
-    proveedorNombreDecodificado.trim().toLowerCase() === "ypf";
+  const isProveedorInterno = false;
 
   const { role, isAdmin, group, listasAsociadas, setListasAsociadas } = useUserContext();
 
@@ -600,7 +599,7 @@ const FormAdd: React.FC<IObirasProps> = (props) => {
           const extrasEtapa = getDestinatariosEtapa(etapa);
           destinatarioCO003.push(...extrasEtapa);}
 
-          const emailsResponsablesYPF = !isProveedorInterno
+          const emailsResponsablesSeguimiento = !isProveedorInterno
             ? accionesToAdd
               .map((accion) => accion.ResponsableSeguimiento?.EMail)
               .filter((email) => !!email)
@@ -613,7 +612,7 @@ const FormAdd: React.FC<IObirasProps> = (props) => {
               ...accionesToAdd
                 .filter((a) => a.Responsable && a.Responsable.EMail)
                 .map((a) => a.Responsable.EMail),
-              ...emailsResponsablesYPF
+              ...emailsResponsablesSeguimiento
 
             ])
           );
