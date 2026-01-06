@@ -84,13 +84,15 @@ const ObiraLista: React.FC<ObiraListaProps> = ({ context }) => {
     setObiraFlags({});
     setFilteredObiras([]);
     if (proveedorNombre) {
-      const nombreProveedor = decodeURIComponent(proveedorNombre).replace(/-/g, " ");
+      // En modo mock, convertir guiones a underscores para coincidir con formato mock
+      // En modo real SharePoint, convertir guiones a espacios
+      const nombreProveedor = decodeURIComponent(proveedorNombre).replace(/-/g, "_").toUpperCase();
       getFilteredProveedores(`Activo eq 1 and Title eq '${nombreProveedor}'`);
     }
   }, [proveedorNombre]);
 
   useEffect(() => {
-    if (proveedores && proveedores.length > 0) {
+    if (proveedores && proveedores.length > 0 && proveedores[0].ListaAsociada) {
       const newListasAsociadas = {
         acciones: proveedores[0].ListaAsociada.acciones || "",
         gestiones: proveedores[0].ListaAsociada.gestiones || "",
@@ -116,8 +118,9 @@ const ObiraLista: React.FC<ObiraListaProps> = ({ context }) => {
       const filtroDeItems: string = `Activo eq ${estadoItems}`;
       
       // Obtener el nombre del proveedor desde la URL
+      // Convertir guiones a guiones bajos para coincidir con el formato del mock
       const nombreProveedor = proveedorNombre 
-        ? decodeURIComponent(proveedorNombre).replace(/-/g, " ").toUpperCase()
+        ? decodeURIComponent(proveedorNombre).replace(/-/g, "_").toUpperCase()
         : "";
       
       const obiraDatasource = getDatasource(
@@ -288,7 +291,13 @@ const ObiraLista: React.FC<ObiraListaProps> = ({ context }) => {
     const items: Obira[] = getSelectedItems();
     try {
       // Dar de alta nuevamente los ítems seleccionados
-      const obiraDataSource = new ObiraDataSource(listasAsociadas.obiras);
+      const nombreProveedor = proveedorNombre 
+        ? decodeURIComponent(proveedorNombre).replace(/-/g, "_").toUpperCase()
+        : "";
+      const obiraDataSource = getDatasource(
+        new ObiraDataSource(listasAsociadas.obiras),
+        new ObiraMock(nombreProveedor)
+      );
       for (const item of items) {
         const itemToActivate = { Id: item.Id, Activo: true };
         await obiraDataSource.edit(itemToActivate);
@@ -380,8 +389,8 @@ const ObiraLista: React.FC<ObiraListaProps> = ({ context }) => {
       key: "tituloproblema",
       name: "Título del problema",
       fieldName: "TituloDelProblema",
-      minWidth: 646,
-      maxWidth: 646,
+      minWidth: 200,
+      maxWidth: 350,
       isResizable: true,
       onRender: (item: Obira) => renderWithTooltip(item.TituloDelProblema),
     },

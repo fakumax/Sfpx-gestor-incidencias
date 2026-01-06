@@ -53,4 +53,52 @@ export default class AccionDefinitivaMock implements IAccionDefinitivaDataSource
     const item = mockData.find(o => o.Id === itemId);
     return mockDelay(item ? new AccionDefinitiva(item) : null);
   }
+
+  public async getFilteredItems(filter: string): Promise<Array<AccionDefinitiva>> {
+    console.log("🔎 [MOCK] Filtrando acciones definitivas...", filter);
+    return this.getItems();
+  }
+
+  public async addMultiple(items: Partial<AccionDefinitiva>[]): Promise<AccionDefinitiva[]> {
+    console.log("➕ [MOCK] Agregando múltiples acciones definitivas...");
+    const results: AccionDefinitiva[] = [];
+    for (const item of items) {
+      const result = await this.add(item);
+      results.push(result);
+    }
+    return results;
+  }
+
+  public async editMultiple(items: Partial<AccionDefinitiva>[]): Promise<AccionDefinitiva[]> {
+    console.log("✏️ [MOCK] Editando múltiples acciones definitivas...");
+    const results: AccionDefinitiva[] = [];
+    for (const item of items) {
+      const result = await this.edit(item);
+      results.push(result);
+    }
+    return results;
+  }
+
+  public async deleteMultiple(ids: number[]): Promise<void> {
+    console.log("🗑️ [MOCK] Eliminando múltiples acciones definitivas...", ids);
+    for (const id of ids) {
+      await this.delete(id);
+    }
+  }
+
+  public async getActionsByObiraIds(obiraIds: number[]): Promise<AccionDefinitiva[]> {
+    console.log("🔍 [MOCK] Obteniendo acciones por ObiraIds...", obiraIds);
+    const items = mockData.filter(item => obiraIds.includes(item.ObirasId));
+    return mockDelay(items.map(item => new AccionDefinitiva(item)));
+  }
+
+  public async addMultipleFiles(files: File[], itemId: number): Promise<void> {
+    console.log("📤 [MOCK] Simulando subida de archivos:", files.map(f => f.name));
+    return mockDelay(undefined);
+  }
+
+  public async deleteMultipleFiles(fileNames: string[], itemId: number): Promise<void> {
+    console.log("🗑️ [MOCK] Simulando eliminación de archivos:", fileNames);
+    return mockDelay(undefined);
+  }
 }

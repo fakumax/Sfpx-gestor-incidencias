@@ -6,6 +6,7 @@ import { BaseEntity } from '../../entities';
 import { createReducer } from '../../utils';
 import { stringIsNullOrEmpty } from '@pnp/core';
 import IResponsableEtapaDatasource from './IResponsableEtapaDatasource';
+import { USE_MOCK_DATA } from '../../mock';
 
 const ADD = 'ADD';
 const EDIT = 'EDIT';
@@ -38,11 +39,15 @@ export type DatasourceHook<TItem extends BaseEntity> = [
 function useResponsableEtapaDatasource<TItem extends BaseEntity>(
     entityDatasource: IResponsableEtapaDatasource<TItem>
 ): DatasourceHook<TItem> {
-    const datasource = (Environment.type === EnvironmentType.SharePoint && entityDatasource && !stringIsNullOrEmpty(entityDatasource.listTitle)) ? entityDatasource : undefined;
+    const datasource = USE_MOCK_DATA
+        ? entityDatasource
+        : (Environment.type === EnvironmentType.SharePoint && entityDatasource && !stringIsNullOrEmpty(entityDatasource.listTitle))
+            ? entityDatasource
+            : undefined;
 
     const datasourceReducer = createReducer<IDatasourceState<TItem>>({
         [LOAD]: (state) => ({ ...state, isLoading: true, error: false }),
-        [ERROR]: (state) => ({ ...state, error: true }),
+        [ERROR]: (state) => ({ ...state, error: true, isLoading: false }),
         [ADD]: (state, action) => ({ items: [...state.items, action.payload], item: action.payload, isLoading: false, error: false }),
         [EDIT]: (state, action) => ({
             items: state.items.map(entity => entity.Id === action.payload.Id ? action.payload : entity),

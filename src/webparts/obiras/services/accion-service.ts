@@ -1,10 +1,10 @@
 import { Accion } from "../../../core";
-import AccionDatasource from "../../../core/api/Accion/AccionDatasource";
+import { createAccionDataSource } from "../../../core/api/factory";
 import { IAcciones } from "../components/Formulario/IFormulario";
 import moment from 'moment';
 
 export const uploadAccion = async (acciones: IAcciones[], listTitle: string, obiraId: number): Promise<{ added: any[], updated: any[], deleted: number[] }> => {
-    const accionDatasource = new AccionDatasource(listTitle);
+    const accionDatasource = createAccionDataSource(listTitle);
 
     const accionesToAdd = acciones.filter(accion => accion.added && !accion.deleted).map(action => new Accion({
         ...action,
@@ -39,7 +39,7 @@ export const uploadAccion = async (acciones: IAcciones[], listTitle: string, obi
 }
 
 export const uploadFilesAccion = async (acciones: IAcciones[], listTitle: string): Promise<void> => {
-    const accionDatasource = new AccionDatasource(listTitle);
+    const accionDatasource = createAccionDataSource(listTitle);
     for (let item of acciones) {
 
         let filesToAdd: File[] = [];
@@ -67,8 +67,8 @@ export const uploadFilesAccion = async (acciones: IAcciones[], listTitle: string
 
 // Devuelve un objeto { [obiraId]: true } para los ObiraIds que tienen al menos una acción
 export const getAccionesPorObiraIds = async (obiraIds: number[], listTitle?: string): Promise<Record<number, boolean>> => {
-    const accionDatasource = new AccionDatasource(listTitle);
-    const items = await accionDatasource.getActionsByObiraIds(obiraIds);
+    const accionDatasource = createAccionDataSource(listTitle);
+    const items = await accionDatasource.getActionsByObiraIds?.(obiraIds) || [];
     const result: Record<number, boolean> = {};
     items.forEach((item: any) => {
         const obiraId = item.ObirasId;
@@ -81,6 +81,6 @@ export const getAccionesPorObiraIds = async (obiraIds: number[], listTitle?: str
 
 // Devuelve todas las acciones para los ObiraIds dados (para exportar a Excel)
 export const getAccionesPorObiraIdsFull = async (obiraIds: number[], listTitle?: string): Promise<Accion[]> => {
-    const accionDatasource = new AccionDatasource(listTitle);
-    return await accionDatasource.getActionsByObiraIds(obiraIds);
+    const accionDatasource = createAccionDataSource(listTitle);
+    return await accionDatasource.getActionsByObiraIds?.(obiraIds) || [];
 };

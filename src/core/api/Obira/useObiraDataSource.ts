@@ -4,6 +4,7 @@ import { Obira } from "../../entities";
 import { createReducer } from "../../utils";
 import IObiraDatasource from "./IObiraDatasource";
 import { stringIsNullOrEmpty } from "@pnp/core";
+import { USE_MOCK_DATA } from "../../mock";
 
 const ADD = "ADD";
 const EDIT = "EDIT";
@@ -32,16 +33,19 @@ export type DatasourceHook = [
 function useObiraDataSource(
   entityDatasource: IObiraDatasource<Obira>
 ): DatasourceHook {
-  const datasource: IObiraDatasource<Obira> =
-    Environment.type === EnvironmentType.SharePoint &&
-    entityDatasource &&
-    !stringIsNullOrEmpty(entityDatasource.listTitle)
+  // En modo mock, siempre usar el datasource proporcionado
+  // En modo SharePoint, verificar que tenga un listTitle válido
+  const datasource: IObiraDatasource<Obira> = USE_MOCK_DATA
+    ? entityDatasource
+    : (Environment.type === EnvironmentType.SharePoint &&
+        entityDatasource &&
+        !stringIsNullOrEmpty(entityDatasource.listTitle))
       ? entityDatasource
       : null;
 
   const datasourceReducer = createReducer<IDatasourceState>({
     [LOAD]: (state) => ({ ...state, isLoading: true, error: false }),
-    [ERROR]: (state) => ({ ...state, error: true }),
+    [ERROR]: (state) => ({ ...state, error: true, isLoading: false }),
     [ADD]: (state, action) => ({
       items: [...state.items, action.payload],
       item: action.payload,

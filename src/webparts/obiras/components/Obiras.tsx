@@ -63,14 +63,6 @@ const Obiras: React.FC<IObirasProps> = (props) => {
             />
           )}
           <Route
-            path="/proveedores/:proveedorNombre"
-            element={
-              <ProtectedRoute requiredRole={Roles.Proveedor}>
-                <ObiraLista {...props} />
-              </ProtectedRoute>
-            }
-          />
-          <Route
             path="/proveedores/new"
             element={
               <ProtectedRoute requiredRole={Roles.Administradores}>
@@ -85,6 +77,14 @@ const Obiras: React.FC<IObirasProps> = (props) => {
           <Route
             path="/proveedores/:proveedorNombre/:obiraId"
             element={<Formulario {...props} />}
+          />
+          <Route
+            path="/proveedores/:proveedorNombre"
+            element={
+              <ProtectedRoute requiredRole={Roles.Proveedor}>
+                <ObiraLista {...props} />
+              </ProtectedRoute>
+            }
           />
           <Route path="/" element={<Home {...props} />} />
         </Routes>

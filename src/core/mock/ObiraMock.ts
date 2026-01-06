@@ -72,17 +72,32 @@ export default class ObiraMock implements IObiraDatasource<Obira> {
   }
 
   public async getFilteredItems(filter: string): Promise<Array<Obira>> {
-    console.log("🔎 [MOCK] Filtrando obiras...", filter, "Lista:", this.listTitle);
+    console.log("🔎 [MOCK] ====== getFilteredItems ======");
+    console.log("🔎 [MOCK] filter:", filter);
+    console.log("🔎 [MOCK] listTitle:", this.listTitle);
+    console.log("🔎 [MOCK] mockData total:", mockData.length);
+    console.log("🔎 [MOCK] mockData proveedores:", mockData.map(o => o.Proveedor));
     
     // Filtrar primero por items activos
     let filtered = mockData.filter(item => item.Activo !== false);
+    console.log("🔎 [MOCK] Después de filtrar activos:", filtered.length);
     
     // Si listTitle contiene el nombre de un proveedor específico, filtrar por ese proveedor
-    // El listTitle es el nombre del proveedor cuando se pasa desde Proveedores.tsx
+    // El listTitle puede venir como "construcciones_norte" o "CONSTRUCCIONES_NORTE"
     if (this.listTitle && this.listTitle !== "Obiras (MOCK)") {
-      filtered = filtered.filter(item => item.Proveedor === this.listTitle);
+      const normalizedListTitle = this.listTitle.toUpperCase().replace(/-/g, '_').replace(/\s+/g, '_');
+      console.log("🔎 [MOCK] Buscando para proveedor normalizado:", normalizedListTitle);
+      
+      filtered = filtered.filter(item => {
+        const normalizedProveedor = (item.Proveedor || '').toUpperCase().replace(/-/g, '_').replace(/\s+/g, '_');
+        const matches = normalizedProveedor === normalizedListTitle;
+        console.log(`🔎 [MOCK] Comparando: "${normalizedProveedor}" === "${normalizedListTitle}" => ${matches}`);
+        return matches;
+      });
     }
     
+    console.log("🔎 [MOCK] Obiras encontradas FINAL:", filtered.length);
+    console.log("🔎 [MOCK] IDs encontrados:", filtered.map(o => o.Id));
     const items = filtered.map(item => new Obira(item));
     return mockDelay(items);
   }

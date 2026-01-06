@@ -33,4 +33,18 @@
     margin: 0 !important;
     padding: 0 !important;
   }
+
+  // FIX: Evitar que las columnas de Canvas bloqueen clicks
+  [class*="CanvasSection-col"],
+  [class*="CanvasSection"] {
+    pointer-events: none !important;
+  }
+
+  // Restaurar pointer-events en el contenido real
+  [class*="CanvasSection-col"] > *,
+  [class*="CanvasSection"] > *,
+  [class*="ControlZone"] > *,
+  .CanvasZone > * {
+    pointer-events: auto !important;
+  }
 }

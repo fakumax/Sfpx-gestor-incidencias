@@ -67,16 +67,22 @@ const Proveedores: React.FC = () => {
         "Activo eq 1",
         "Title"
       );
+      console.log("🏢 [Proveedores] Proveedores activos:", proveedoresActivos.map(p => ({ Id: p.Id, Title: p.Title })));
+      
       const proveedoresConConteos = await Promise.all(
         proveedoresActivos.map(async (proveedor) => {
           let obirasCount = 0;
+          console.log(`🏢 [Proveedores] Procesando proveedor: ${proveedor.Title}, ListaAsociada:`, proveedor.ListaAsociada);
+          
           if (proveedor.ListaAsociada) {
             const obiraDatasource = getDatasource(
               new ObiraDataSource(proveedor.ListaAsociada.obiras),
               new ObiraMock(proveedor.Title)
             );
+            console.log(`🏢 [Proveedores] Creado ObiraMock con listTitle: ${proveedor.Title}`);
             const obirasActivas = await obiraDatasource.getFilteredItems("Activo eq 1");
             obirasCount = obirasActivas.length;
+            console.log(`🏢 [Proveedores] ${proveedor.Title} tiene ${obirasCount} obiras`);
           }
           return {
             ...proveedor,

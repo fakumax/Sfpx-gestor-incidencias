@@ -23,14 +23,22 @@ export const TitleButton: React.FC<ITitleButtonProps> = ({
   iconSrc,
   iconAlt = "",
   className,
+  onClick,
   ...props
 }) => {
   const buttonClassName = `${styles.titleButton} ${styles[variant]} ${
     className || ""
   }`;
 
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    console.log("🔘 TitleButton clicked:", text);
+    if (onClick) {
+      onClick(e as any);
+    }
+  };
+
   return (
-    <DefaultButton className={buttonClassName} {...props}>
+    <DefaultButton className={buttonClassName} onClick={handleClick} {...props}>
       <span className={styles.text}>{text}</span>
       {iconSrc && <img src={iconSrc} alt={iconAlt} className={styles.icon} />}
     </DefaultButton>

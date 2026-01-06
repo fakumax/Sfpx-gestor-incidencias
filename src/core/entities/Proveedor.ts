@@ -24,11 +24,19 @@ export default class Proveedor extends BaseEntity {
 
     protected mapItem(item: any): void {
         this.Activo = item.Activo !== undefined ? item.Activo : false;
-        this.ListaAsociada =
-            item.listaString ?
-                item.listaString : item.listaAsociada ?
-                    new ListaAsociada(JSON.parse(item.listaAsociada))
-                    : undefined;
+        
+        // Soportar múltiples formatos: ListaAsociada (objeto directo), listaString, o listaAsociada (JSON string)
+        if (item.ListaAsociada && typeof item.ListaAsociada === 'object') {
+            // Datos mock o ya parseados
+            this.ListaAsociada = new ListaAsociada(item.ListaAsociada);
+        } else if (item.listaString) {
+            this.ListaAsociada = item.listaString;
+        } else if (item.listaAsociada) {
+            this.ListaAsociada = new ListaAsociada(JSON.parse(item.listaAsociada));
+        } else {
+            this.ListaAsociada = undefined;
+        }
+        
         this.AttachmentFiles = item.AttachmentFiles || undefined;
         this.Notificacion = item.Notificacion;
         this.Responsable = item.Responsable ? new User(item.Responsable) : new User(null);

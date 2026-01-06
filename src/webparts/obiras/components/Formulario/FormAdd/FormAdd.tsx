@@ -13,7 +13,7 @@ import {
   Roles,
 } from "../../../../../core/utils/Constants";
 import styles from "./FormAdd.module.scss";
-import ObiraDataSource from "../../../../../core/api/Obira/ObiraDataSource";
+import { createObiraDataSource } from "../../../../../core/api/factory";
 import {
   Accordion,
   AccordionItem,
@@ -80,10 +80,11 @@ const FormAdd: React.FC<IObirasProps> = (props) => {
     proveedorNombre: string;
     obiraId: string;
   }>();
-  const proveedorNombreDecodificado = decodeURIComponent(proveedorNombre).replace(
-    /-/g,
-    " "
-  );
+  // Convertir el nombre de proveedor de la URL al formato correcto
+  // Mock usa UPPERCASE con underscores: "CONSTRUCCIONES_NORTE"
+  const proveedorNombreDecodificado = decodeURIComponent(proveedorNombre)
+    .replace(/-/g, "_")
+    .toUpperCase();
 
   const isProveedorInterno = false;
 
@@ -312,13 +313,11 @@ const FormAdd: React.FC<IObirasProps> = (props) => {
   const stackTokens: IStackTokens = { childrenGap: 20 };
 
   React.useEffect(() => {
-    if (group === Roles.Administradores || role === "provider") {
-      const normalizedProveedor = proveedorNombreDecodificado
-        ? proveedorNombreDecodificado.toLowerCase()
-        : "";
-      getFilteredProveedores(`Activo eq 1 and Title eq '${normalizedProveedor}'`);
+    // Siempre intentar cargar el proveedor si hay un nombre de proveedor
+    if (proveedorNombreDecodificado) {
+      getFilteredProveedores(`Activo eq 1 and Title eq '${proveedorNombreDecodificado}'`);
     }
-  }, [group, proveedorNombreDecodificado]);
+  }, [proveedorNombreDecodificado]);
 
   React.useEffect(() => {
     const id = parseInt(obiraId);
@@ -337,7 +336,7 @@ const FormAdd: React.FC<IObirasProps> = (props) => {
   }, [listasAsociadas, group, obiraId]);
 
   React.useEffect(() => {
-    if (proveedores && proveedores.length > 0) {
+    if (proveedores && proveedores.length > 0 && proveedores[0].ListaAsociada) {
       const newListasAsociadas = {
         acciones: proveedores[0].ListaAsociada.acciones || "",
         gestiones: proveedores[0].ListaAsociada.gestiones || "",
@@ -348,7 +347,7 @@ const FormAdd: React.FC<IObirasProps> = (props) => {
   }, [proveedores]);
 
   const uploadFiles = async (listTitle: string, adjuntos: IFileAdd[], itemId: number) => {
-    const obiraDataSource = new ObiraDataSource(listTitle);
+    const obiraDataSource = createObiraDataSource(listTitle);
     const filteredFiles = adjuntos
       .filter((file) => !file.deleted)
       .map((file) => file.file);
@@ -367,7 +366,7 @@ const FormAdd: React.FC<IObirasProps> = (props) => {
           ? moment().toISOString()
           : null;
 
-      const obiraDataSource = new ObiraDataSource(listasAsociadas.obiras);
+      const obiraDataSource = createObiraDataSource(listasAsociadas.obiras);
       const obiraToSave = new Obira({
         ...obiraData,
         FechaCierre: fechaCierreStr,

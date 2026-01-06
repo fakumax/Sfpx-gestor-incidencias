@@ -4,6 +4,7 @@ import { AccionDefinitiva, BaseEntity } from "../../entities";
 import { createReducer } from "../../utils";
 import IAccionDefinitivaDataSource from "./IAccionDefinitivaDataSource";
 import { stringIsNullOrEmpty } from "@pnp/core";
+import { USE_MOCK_DATA } from "../../mock";
 
 const ADD = "ADD";
 const EDIT = "EDIT";
@@ -32,16 +33,17 @@ export type DatasourceHook<TItem extends BaseEntity> = [
 function useAccionDefinitivaDataSource<TItem extends BaseEntity>(
   entityDatasource: IAccionDefinitivaDataSource<TItem>
 ): DatasourceHook<TItem> {
-  const datasource: IAccionDefinitivaDataSource<TItem> =
-    Environment.type === EnvironmentType.SharePoint &&
-    entityDatasource &&
-    !stringIsNullOrEmpty(entityDatasource.listTitle)
+  const datasource: IAccionDefinitivaDataSource<TItem> = USE_MOCK_DATA
+    ? entityDatasource
+    : (Environment.type === EnvironmentType.SharePoint &&
+        entityDatasource &&
+        !stringIsNullOrEmpty(entityDatasource.listTitle))
       ? entityDatasource
       : null;
 
   const datasourceReducer = createReducer<IDatasourceState<TItem>>({
     [LOAD]: (state) => ({ ...state, isLoading: true, error: false }),
-    [ERROR]: (state) => ({ ...state, error: true }),
+    [ERROR]: (state) => ({ ...state, error: true, isLoading: false }),
     [ADD]: (state, action) => ({
       items: [...state.items, action.payload],
       item: action.payload,

@@ -5,6 +5,7 @@ import { Equipo, BaseEntity } from '../../entities';
 import { createReducer } from '../../utils';
 import IEquipoDatasource from './IEquipoDatasource';
 import { stringIsNullOrEmpty } from '@pnp/core';
+import { USE_MOCK_DATA } from '../../mock';
 
 const ADD = 'ADD';
 const EDIT = 'EDIT';
@@ -36,11 +37,15 @@ function useEquipoDatasource<TItem extends BaseEntity>(
     entityDatasource: IEquipoDatasource<TItem>
 ): DatasourceHook<TItem> {
 
-    const datasource: IEquipoDatasource<TItem> = (Environment.type === EnvironmentType.SharePoint && entityDatasource && !stringIsNullOrEmpty(entityDatasource.listTitle)) ? entityDatasource : null;
+    const datasource: IEquipoDatasource<TItem> = USE_MOCK_DATA
+        ? entityDatasource
+        : (Environment.type === EnvironmentType.SharePoint && entityDatasource && !stringIsNullOrEmpty(entityDatasource.listTitle))
+            ? entityDatasource
+            : null;
 
     const datasourceReducer = createReducer<IDatasourceState<TItem>>({
         [LOAD]: (state) => ({ ...state, isLoading: true, error: false }),
-        [ERROR]: (state) => ({ ...state, error: true }),
+        [ERROR]: (state) => ({ ...state, error: true, isLoading: false }),
         [ADD]: (state, action) => ({ items: [...state.items, action.payload], item: action.payload, isLoading: false, error: false }),
         [EDIT]: (state, action) => ({
             items: state.items.map(entity => entity.Id === action.payload.Id ? action.payload : entity),

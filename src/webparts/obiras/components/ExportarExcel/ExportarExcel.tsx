@@ -1,5 +1,5 @@
 import * as React from "react";
-import ObiraDataSource from "../../../../core/api/Obira/ObiraDataSource";
+import { createObiraDataSource } from "../../../../core/api/factory";
 import { CustomButton } from "../../../../core/ui/components";
 import { getAnormalidadesPorObiraIdsFull } from "../../services/anormalidad-service";
 import { getAccionesPorObiraIdsFull } from "../../services/accion-service";
@@ -69,7 +69,7 @@ const ExportarExcel: React.FC<ExportarExcelProps> = ({
 
   React.useEffect(() => {
     if (allObiras.length === 0 && listasAsociadas?.obiras) {
-      const ds = new ObiraDataSource(listasAsociadas.obiras);
+      const ds = createObiraDataSource(listasAsociadas.obiras);
       ds.getFilteredItems(`Activo eq ${ESTADO_ITEM.ACTIVO}`).then((all) =>
         setAllObiras(all.slice(0, maxExport))
       );

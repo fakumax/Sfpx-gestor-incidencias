@@ -5,6 +5,7 @@ import { Locacion, BaseEntity } from '../../entities';
 import { createReducer } from '../../utils';
 import ILocacionDatasource from './ILocacionDatasource';
 import { stringIsNullOrEmpty } from '@pnp/core';
+import { USE_MOCK_DATA } from '../../mock';
 
 const ADD = 'ADD';
 const EDIT = 'EDIT';
@@ -36,11 +37,15 @@ function useLocacionDatasource<TItem extends BaseEntity>(
     entityDatasource: ILocacionDatasource<TItem>
 ): DatasourceHook<TItem> {
 
-    const datasource: ILocacionDatasource<TItem> = (Environment.type === EnvironmentType.SharePoint && entityDatasource && !stringIsNullOrEmpty(entityDatasource.listTitle)) ? entityDatasource : null;
+    const datasource: ILocacionDatasource<TItem> = USE_MOCK_DATA
+        ? entityDatasource
+        : (Environment.type === EnvironmentType.SharePoint && entityDatasource && !stringIsNullOrEmpty(entityDatasource.listTitle))
+            ? entityDatasource
+            : null;
 
     const datasourceReducer = createReducer<IDatasourceState<TItem>>({
         [LOAD]: (state) => ({ ...state, isLoading: true, error: false }),
-        [ERROR]: (state) => ({ ...state, error: true }),
+        [ERROR]: (state) => ({ ...state, error: true, isLoading: false }),
         [ADD]: (state, action) => ({ items: [...state.items, action.payload], item: action.payload, isLoading: false, error: false }),
         [EDIT]: (state, action) => ({
             items: state.items.map(entity => entity.Id === action.payload.Id ? action.payload : entity),

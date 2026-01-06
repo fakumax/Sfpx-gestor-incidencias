@@ -20,11 +20,11 @@ export const mockUsers = [
 // LOCACIONES
 // =====================
 export const mockLocaciones = [
-  { Id: 1, Title: 'Locación Norte A', Bloque: 'Bloque Norte' },
-  { Id: 2, Title: 'Locación Norte B', Bloque: 'Bloque Norte' },
-  { Id: 3, Title: 'Locación Sur A', Bloque: 'Bloque Sur' },
-  { Id: 4, Title: 'Locación Sur B', Bloque: 'Bloque Sur' },
-  { Id: 5, Title: 'Locación Centro', Bloque: 'Bloque Centro' },
+  { Id: 1, Title: 'Locación Norte A', Bloque: 'Bloque Norte', AREA: 'Área Norte' },
+  { Id: 2, Title: 'Locación Norte B', Bloque: 'Bloque Norte', AREA: 'Área Norte' },
+  { Id: 3, Title: 'Locación Sur A', Bloque: 'Bloque Sur', AREA: 'Área Sur' },
+  { Id: 4, Title: 'Locación Sur B', Bloque: 'Bloque Sur', AREA: 'Área Sur' },
+  { Id: 5, Title: 'Locación Centro', Bloque: 'Bloque Centro', AREA: 'Área Centro' },
 ];
 
 // =====================
@@ -69,6 +69,8 @@ export const mockProveedores = [
     Contacto: 'contacto@delta.com',
     ListaAsociada: {
       obiras: 'ObirasServiciosDelta',
+      acciones: 'AccionesServiciosDelta',
+      gestiones: 'GestionesServiciosDelta',
       etiquetas: 'EtiquetasServiciosDelta',
       responsableEtapa: 'ResponsablesServiciosDelta',
       equipos: 'EquiposServiciosDelta',
@@ -85,6 +87,8 @@ export const mockProveedores = [
     Contacto: 'info@norte.com',
     ListaAsociada: {
       obiras: 'ObirasConstruccionesNorte',
+      acciones: 'AccionesConstruccionesNorte',
+      gestiones: 'GestionesConstruccionesNorte',
       etiquetas: 'EtiquetasConstruccionesNorte',
       responsableEtapa: 'ResponsablesConstruccionesNorte',
       equipos: 'EquiposConstruccionesNorte',
@@ -101,6 +105,8 @@ export const mockProveedores = [
     Contacto: 'admin@sur.com',
     ListaAsociada: {
       obiras: 'ObirasTransportesSur',
+      acciones: 'AccionesTransportesSur',
+      gestiones: 'GestionesTransportesSur',
       etiquetas: 'EtiquetasTransportesSur',
       responsableEtapa: 'ResponsablesTransportesSur',
       equipos: 'EquiposTransportesSur',
@@ -117,6 +123,8 @@ export const mockProveedores = [
     Contacto: 'logistica@central.com',
     ListaAsociada: {
       obiras: 'ObirasLogisticaCentral',
+      acciones: 'AccionesLogisticaCentral',
+      gestiones: 'GestionesLogisticaCentral',
       etiquetas: 'EtiquetasLogisticaCentral',
       responsableEtapa: 'ResponsablesLogisticaCentral',
       equipos: 'EquiposLogisticaCentral',
@@ -154,7 +162,7 @@ export const mockObiras = [
     TituloDelProblema: 'Fuga detectada en válvula principal',
     TipoDeProblema: 'Seguridad',
     Etapa: 'Conexión de Pozos - E40',
-    EstadoGeneral: '1. Abierto',
+    EstadoGeneral: '1. Nuevo',  // Corregido de '1. Abierto'
     Detalle: 'Se detectó una fuga menor en la válvula principal del sector norte. Requiere atención inmediata.',
     FechaDeOcurrenciaDelProblema: new Date('2025-12-15').toISOString(),
     PADLocacion: mockLocaciones[0],
@@ -164,7 +172,7 @@ export const mockObiras = [
     QTY: 1,
     Unidad: 'Unidad',
     AccionInmediata: 'Se aisló la zona afectada y se notificó al supervisor',
-    Proveedor: mockProveedores[0].Title,
+    Proveedor: mockProveedores[0].Title,  // SERVICIOS_DELTA
     Author: mockUsers[0],
     Etiquetas: [mockEtiquetas[0], mockEtiquetas[1]],
     Activo: true,
@@ -180,7 +188,7 @@ export const mockObiras = [
     TituloDelProblema: 'Retraso en entrega de materiales',
     TipoDeProblema: 'Calidad',
     Etapa: 'Construcción de Locación - E10',
-    EstadoGeneral: '2. En Proceso',
+    EstadoGeneral: '2. Causa raíz definida',  // Corregido de '2. En Proceso'
     Detalle: 'El proveedor no entregó los materiales en la fecha acordada, generando retrasos en el cronograma.',
     FechaDeOcurrenciaDelProblema: new Date('2025-12-20').toISOString(),
     PADLocacion: mockLocaciones[2],
@@ -190,7 +198,7 @@ export const mockObiras = [
     QTY: 50,
     Unidad: 'Toneladas',
     AccionInmediata: 'Se contactó al proveedor para acelerar la entrega',
-    Proveedor: mockProveedores[1].Title,
+    Proveedor: mockProveedores[1].Title,  // CONSTRUCCIONES_NORTE
     Author: mockUsers[1],
     Etiquetas: [mockEtiquetas[1]],
     Activo: true,
@@ -206,7 +214,7 @@ export const mockObiras = [
     TituloDelProblema: 'Incidente ambiental menor',
     TipoDeProblema: 'Medio Ambiente',
     Etapa: 'Inicio Prod - E40',
-    EstadoGeneral: '5. Cerrado',
+    EstadoGeneral: '3. Contramedidas definidas',  // Cambiado de Cerrado para que aparezca
     Detalle: 'Derrame menor de fluido contenido exitosamente.',
     FechaDeOcurrenciaDelProblema: new Date('2025-11-10').toISOString(),
     PADLocacion: mockLocaciones[4],
@@ -216,7 +224,7 @@ export const mockObiras = [
     QTY: 5,
     Unidad: 'Litros',
     AccionInmediata: 'Contención inmediata y limpieza del área',
-    Proveedor: mockProveedores[2].Title,
+    Proveedor: mockProveedores[0].Title,  // SERVICIOS_DELTA (cambiado de TRANSPORTES_SUR)
     Author: mockUsers[2],
     Etiquetas: [mockEtiquetas[2]],
     Activo: true,
@@ -224,7 +232,6 @@ export const mockObiras = [
     ResponsableItem: [mockUsers[0], mockUsers[3]],
     tieneAccionDefinitiva: true,
     tieneGestionAnormalidad: true,
-    FechaCierre: new Date('2025-12-01').toISOString(),
     Created: new Date('2025-11-10').toISOString(),
   },
   {
@@ -243,7 +250,7 @@ export const mockObiras = [
     QTY: 2,
     Unidad: 'Horas',
     AccionInmediata: 'Activación de generador de respaldo',
-    Proveedor: mockProveedores[0].Title,
+    Proveedor: mockProveedores[1].Title,  // CONSTRUCCIONES_NORTE
     Author: mockUsers[0],
     Etiquetas: [mockEtiquetas[3]],
     Activo: true,
@@ -259,7 +266,7 @@ export const mockObiras = [
     TituloDelProblema: 'Equipo con mantenimiento pendiente',
     TipoDeProblema: 'Calidad',
     Etapa: 'Conexión de Pozos - E40',
-    EstadoGeneral: '1. Abierto',
+    EstadoGeneral: '1. Nuevo',
     Detalle: 'El equipo Alpha requiere mantenimiento preventivo según cronograma.',
     FechaDeOcurrenciaDelProblema: new Date('2026-01-02').toISOString(),
     PADLocacion: mockLocaciones[0],
@@ -269,7 +276,7 @@ export const mockObiras = [
     QTY: 1,
     Unidad: 'Unidad',
     AccionInmediata: 'Programar parada de equipo para mantenimiento',
-    Proveedor: mockProveedores[0].Title,
+    Proveedor: mockProveedores[1].Title,  // CONSTRUCCIONES_NORTE
     Author: mockUsers[2],
     Etiquetas: [mockEtiquetas[1], mockEtiquetas[4]],
     Activo: true,
@@ -295,7 +302,7 @@ export const mockObiras = [
     QTY: 3,
     Unidad: 'Unidad',
     AccionInmediata: 'Charla de seguridad inmediata con el equipo',
-    Proveedor: mockProveedores[0].Title,
+    Proveedor: mockProveedores[1].Title,  // CONSTRUCCIONES_NORTE
     Author: mockUsers[3],
     Etiquetas: [mockEtiquetas[0]],
     Activo: true,
@@ -321,7 +328,7 @@ export const mockObiras = [
     QTY: 1,
     Unidad: 'Unidad',
     AccionInmediata: 'Búsqueda exhaustiva en área de trabajo',
-    Proveedor: mockProveedores[0].Title,
+    Proveedor: mockProveedores[0].Title,  // SERVICIOS_DELTA
     Author: mockUsers[1],
     Etiquetas: [mockEtiquetas[1]],
     Activo: true,

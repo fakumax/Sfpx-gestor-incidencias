@@ -56,7 +56,20 @@ export default class ProveedorMock implements IProveedorDatasource<Proveedor> {
 
   public async getFilteredItems(filter: string, orderBy?: string, ascending: boolean = true): Promise<Array<Proveedor>> {
     console.log("🔎 [MOCK] Filtrando proveedores...", filter, "orderBy:", orderBy);
-    let items = await this.getItems();
+    let items = [...mockData].filter(item => item.Activo !== false);
+    
+    // Parsear filtro simple para Title
+    // Ejemplos: "Activo eq 1 and Title eq 'CONSTRUCCIONES_NORTE'"
+    if (filter) {
+      const titleMatch = filter.match(/Title\s+eq\s+'([^']+)'/i);
+      if (titleMatch) {
+        const titleFilter = titleMatch[1].toUpperCase();
+        items = items.filter(item => 
+          item.Title?.toUpperCase() === titleFilter ||
+          item.Title?.toUpperCase().replace(/_/g, ' ') === titleFilter.replace(/_/g, ' ')
+        );
+      }
+    }
     
     // Aplicar ordenamiento si se especifica
     if (orderBy) {
@@ -69,6 +82,6 @@ export default class ProveedorMock implements IProveedorDatasource<Proveedor> {
       });
     }
     
-    return items;
+    return mockDelay(items.map(item => new Proveedor(item)));
   }
 }

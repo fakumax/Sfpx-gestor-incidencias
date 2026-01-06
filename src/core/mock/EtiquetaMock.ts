@@ -17,6 +17,10 @@ export default class EtiquetaMock implements IEtiquetaDatasource {
     return mockDelay(items);
   }
 
+  public async getItems(): Promise<Array<Etiqueta>> {
+    return this.getAll();
+  }
+
   public async add(item: Partial<Etiqueta>): Promise<Etiqueta> {
     console.log("➕ [MOCK] Agregando etiqueta...", item);
     const newItem = { ...item, Id: nextId++ };

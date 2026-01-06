@@ -47,6 +47,24 @@ export default class LocacionMock implements ILocacionDatasource<Locacion> {
 
   public async getFilteredItems(filter: string): Promise<Array<Locacion>> {
     console.log("🔎 [MOCK] Filtrando locaciones...", filter);
-    return this.getItems();
+    
+    let filtered = [...mockData];
+    
+    // Parsear filtro AREA eq 'valor' o AREA eq '[object Object]'
+    if (filter) {
+      const areaMatch = filter.match(/AREA\s+eq\s+'([^']+)'/i);
+      if (areaMatch) {
+        let areaValue = areaMatch[1];
+        // Si viene como [object Object], devolver todas las locaciones
+        if (areaValue === '[object Object]') {
+          console.log("⚠️ [MOCK] Recibido objeto en filtro AREA, devolviendo todas las locaciones");
+        } else {
+          filtered = filtered.filter(loc => loc.AREA === areaValue);
+        }
+      }
+    }
+    
+    const items = filtered.map(item => new Locacion(item));
+    return mockDelay(items);
   }
 }

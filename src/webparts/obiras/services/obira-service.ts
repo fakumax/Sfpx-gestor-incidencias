@@ -1,8 +1,8 @@
-import ObiraDataSource from "../../../core/api/Obira/ObiraDataSource";
+import { createObiraDataSource } from "../../../core/api/factory";
 import { IFileAdd } from "../components/Formulario/Formulario";
 
 export const uploadFilesObira = async (files: IFileAdd[], listTitle: string, obiraId: number): Promise<void> => {
-    const obiraDtasource = new ObiraDataSource(listTitle);
+    const obiraDtasource = createObiraDataSource(listTitle);
 
     let filesToAdd: File[] = [];
     let filesToDelete: string[] = [];

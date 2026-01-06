@@ -12,6 +12,8 @@
   justify-content: space-between;
   min-width: 200px;
   height: 84px;
+  cursor: pointer !important;
+  pointer-events: auto !important;
 
   .text {
     flex: 1;

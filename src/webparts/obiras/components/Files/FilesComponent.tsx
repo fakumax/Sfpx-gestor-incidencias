@@ -14,7 +14,7 @@ import {
 } from "@fluentui/react";
 import { IFileAdd } from "../Formulario/Formulario";
 import styles from "./FilesComponent.module.scss";
-import ObiraDataSource from "../../../../core/api/Obira/ObiraDataSource";
+import { createObiraDataSource } from "../../../../core/api/factory";
 import VistaPrevia from "../vistaPrevia/VistaPrevia";
 import { useUserContext } from "../../../../core/context/UserContext";
 
@@ -69,7 +69,7 @@ const FilesComponent: React.FC<IFilesComponentsProps> = ({
           sizes[item.id] = item.file.size;
         } else if (item.ServerRelativeUrl) {
           try {
-            const ds = new ObiraDataSource("");
+            const ds = createObiraDataSource("");
             const fullUrl = origin + item.ServerRelativeUrl;
             const realSize = await ds.getAttachmentSizeByUrl(fullUrl);
             sizes[item.id] = realSize > 0 ? realSize : null;

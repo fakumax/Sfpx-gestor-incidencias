@@ -3,3 +3,12 @@
   width: 100vw;
   padding: 4rem 4rem 0rem 4rem;
 }
+
+// Sobrescribir el max-width del contenedor de SharePoint para que el webpart ocupe todo el ancho
+:global {
+  .CanvasZoneSectionContainer,
+  div[class*="CanvasZone-SectionContainer"],
+  div[data-automation-id="CanvasZone-SectionContainer"] {
+    max-width: 100% !important;
+  }
+}

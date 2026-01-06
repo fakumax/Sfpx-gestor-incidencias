@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useState } from "react";
-import ObiraDataSource from "../../../../core/api/Obira/ObiraDataSource";
 import { useUserContext } from "../../../../core/context/UserContext";
 import { useParams } from "react-router-dom";
 import useItemEquipoDataSource from "../../../../core/api/Equipo/useItemEquipoDataSource";
@@ -31,10 +30,12 @@ interface ObiraFiltroProps {
 }
 
 import useItemLocacionDataSource from "../../../../core/api/Locacion/useItemLocacionDataSource";
-import LocacionDataSource from "../../../../core/api/Locacion/LocacionDataSource";
-import EtiquetaDataSource from "../../../../core/api/Etiqueta/EtiquetaDataSource";
-import LocacionDatasource from "../../../../core/api/Locacion/LocacionDataSource";
 import Locacion from "../../../../core/entities/Locacion";
+import { 
+  createLocacionDataSource, 
+  createEtiquetaDataSource,
+  createObiraDataSource 
+} from "../../../../core/api/factory";
 
 const ObiraFiltro: React.FC<ObiraFiltroProps> = ({
   isOpen,
@@ -125,28 +126,34 @@ React.useEffect(() => {
 
   React.useEffect(() => {
     const listTitle = listasAsociadas?.obiras || "";
-    if (listTitle) {
-      const obiraDataSource = new ObiraDataSource(listTitle);
-      obiraDataSource.getChoiceFields().then((choiceFields) => {
-        setChoiceEtapaOptions(
-          choiceFields["Etapa"]?.map((choice: string) => ({
-            key: choice,
-            text: choice,
-          })) || []
-        );
-        setChoiceEstadoGeneralOptions(
-          choiceFields["EstadoGeneral"]?.map((choice: string) => ({
-            key: choice,
-            text: choice,
-          })) || []
-        );
-      });
-    }
-  }, [listasAsociadas]);
+    // En modo mock, crear datasource aunque no haya listTitle
+    const obiraDataSource = createObiraDataSource(listTitle, proveedorNombre);
+    
+    obiraDataSource.getChoiceFields?.().then((choiceFields: any) => {
+      console.log("📋 [ObiraFiltro] choiceFields cargados:", choiceFields);
+      setChoiceEtapaOptions(
+        choiceFields["Etapa"]?.map((choice: string) => ({
+          key: choice,
+          text: choice,
+        })) || []
+      );
+      setChoiceEstadoGeneralOptions(
+        choiceFields["EstadoGeneral"]?.map((choice: string) => ({
+          key: choice,
+          text: choice,
+        })) || []
+      );
+    }).catch((err) => {
+      console.error("❌ [ObiraFiltro] Error cargando choiceFields:", err);
+      // Mock no tiene getChoiceFields, usar defaults
+      setChoiceEtapaOptions([]);
+      setChoiceEstadoGeneralOptions([]);
+    });
+  }, [listasAsociadas, proveedorNombre]);
 
   React.useEffect(() => {
     (async () => {
-      const LocacionesDataSource = new LocacionDatasource(Lista.Locaciones);
+      const LocacionesDataSource = createLocacionDataSource(Lista.Locaciones);
       const locaciones: Locacion[] = await LocacionesDataSource.getItems();
 
       if (locaciones && locaciones.length > 0) {
@@ -260,7 +267,7 @@ React.useEffect(() => {
 
     const filterStr = filters.join(" and ");
     const listTitle = listasAsociadas?.obiras || "";
-    const obiraDataSource = new ObiraDataSource(listTitle);
+    const obiraDataSource = createObiraDataSource(listTitle, proveedorNombre);
     let result = await obiraDataSource.getFilteredItems(filterStr);
 
     // TITULO DEL PROBLEMA
@@ -360,7 +367,7 @@ React.useEffect(() => {
         <TagPicker
           onResolveSuggestions={async (filter, tagList) => {
             if (!filter || filter.length < 3) return [];
-            const ds = new LocacionDataSource(Lista.Locaciones);
+            const ds = createLocacionDataSource(Lista.Locaciones);
             const locaciones = await ds.getFilteredItems(
               `substringof('${escapeOData(filter)}', Title)`
             );
@@ -393,7 +400,7 @@ React.useEffect(() => {
           label="Etiquetas"
           onResolveSuggestions={async (filter, tagList) => {
             if (!filter || filter.length < 1) return [];
-            const ds = new EtiquetaDataSource(Lista.Etiquetas);
+            const ds = createEtiquetaDataSource(Lista.Etiquetas);
             const etiquetas = await ds.getFilteredItems(
               `substringof('${escapeOData(filter)}', Title)`
             );

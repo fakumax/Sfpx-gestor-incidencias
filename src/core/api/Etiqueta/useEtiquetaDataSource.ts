@@ -4,6 +4,7 @@ import { createReducer } from '../../utils';
 import { stringIsNullOrEmpty } from '@pnp/core';
 import { Etiqueta } from '../../entities';
 import EtiquetaDataSource from './EtiquetaDataSource';
+import { USE_MOCK_DATA } from '../../mock';
 
 const ADD = 'ADD';
 const EDIT = 'EDIT';
@@ -34,11 +35,15 @@ export type DatasourceHook<TItem extends Etiqueta> = [
 function useEtiquetaDataSource<TItem extends Etiqueta>(
     entityDatasource: EtiquetaDataSource
 ): DatasourceHook<TItem> {
-    const datasource: EtiquetaDataSource = (Environment.type === EnvironmentType.SharePoint && entityDatasource && !stringIsNullOrEmpty(entityDatasource.listTitle)) ? entityDatasource : null;
+    const datasource: EtiquetaDataSource = USE_MOCK_DATA
+        ? entityDatasource
+        : (Environment.type === EnvironmentType.SharePoint && entityDatasource && !stringIsNullOrEmpty(entityDatasource.listTitle))
+            ? entityDatasource
+            : null;
 
     const datasourceReducer = createReducer<IDatasourceState<TItem>>({
         [LOAD]: (state) => ({ ...state, isLoading: true, error: false }),
-        [ERROR]: (state) => ({ ...state, error: true }),
+        [ERROR]: (state) => ({ ...state, error: true, isLoading: false }),
         [ADD]: (state, action) => ({ items: [...state.items, action.payload], item: action.payload, isLoading: false, error: false }),
         [EDIT]: (state, action) => ({
             items: state.items.map(entity => entity.Id === action.payload.Id ? action.payload : entity),

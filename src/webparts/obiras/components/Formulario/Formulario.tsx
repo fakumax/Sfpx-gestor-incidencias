@@ -36,10 +36,7 @@ import {
 import adjuntarIcon from "../../../../core/ui/icons/AdjuntarIcon.svg";
 import agregarIcon from "../../../../core/ui/icons/AgregarIcon.svg";
 import styles from "./Formulario.module.scss";
-import ObiraDataSource from "../../../../core/api/Obira/ObiraDataSource";
-import EquipoDataSource from "../../../../core/api/Equipo/EquipoDataSource";
-import LocacionDataSource from "../../../../core/api/Locacion/LocacionDataSource";
-import SubKPIDataSource from "../../../../core/api/SubKPI/SubKPIDataSource";
+import { createObiraDataSource, createEquipoDataSource, createLocacionDataSource, createSubKPIDataSource, createAccionDefinitivaDataSource, createGestionAnormalidadDataSource, createAccionDataSource, createProveedorDataSource, createEtiquetaDataSource } from "../../../../core/api/factory";
 import {
   Accordion,
   AccordionItem,
@@ -57,10 +54,7 @@ import {
   Obira,
   Proveedor,
 } from "../../../../core/entities";
-import { AccionDefinitivaDataSource } from "../../../../core/api/AccionDefinitiva/AccionDefinitivaDataSource";
-import { GestionAnormalidadDataSource } from "../../../../core/api/GestionAnormalidad/GestionAnormalidadDataSource";
 import FilesComponent from "../Files/FilesComponent";
-import AccionDatasource from "../../../../core/api/Accion/AccionDatasource";
 import {
   useItemAccionDatasource,
   useItemEquipoDataSource,
@@ -95,9 +89,7 @@ import {
 } from "../../services/anormalidad-service";
 import { uploadFilesObira } from "../../services/obira-service";
 import useEmailManager from "../../../../core/api/email/useEmailManager";
-import ProveedorDatasource from "../../../../core/api/Proveedor/ProveedorDatasource";
 import { FechaRepeticionList } from "./FormAdd/FechaRepeticionField";
-import EtiquetaDataSource from "../../../../core/api/Etiqueta/EtiquetaDataSource";
 import {
   emptyErrorAccion,
   emptyErrorAnormalidad,
@@ -106,7 +98,6 @@ import {
   validateForm,
 } from "./helpers/Helpers";
 import PopupDeAcciones from "./helpers/PopupDeAcciones";
-import LocacionDatasource from "../../../../core/api/Locacion/LocacionDataSource";
 import { MessageTypes, useMessage } from "../../../../core/context/MessageContext";
 export interface IFileAdd {
   id: string;
@@ -237,7 +228,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
     getFilteredSubKPI,
   ] = useItemSubKPIDataSource(Lista.SubKPIAfectado);
 
-  const proveedorDatasource = new ProveedorDatasource(Lista.Proveedores);
+  const proveedorDatasource = createProveedorDataSource(Lista.Proveedores);
 
   const [{ error: errorEmail }, sendEmail, sendEmailTo] = useEmailManager();
 
@@ -391,7 +382,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
   const handleDeleteObira = async () => {
     try {
       // Baja lógica del ítem
-      const obiraDataSource = new ObiraDataSource(listasAsociadas.obiras);
+      const obiraDataSource = createObiraDataSource(listasAsociadas.obiras);
       const deletedObira = { Id: obira.Id, Activo: false };
       await obiraDataSource.edit(deletedObira);
     } catch (e: unknown) {
@@ -557,7 +548,8 @@ const Formulario: React.FC<IObirasProps> = (props) => {
   React.useEffect(() => {
     if (obira) {
       if (obira.Bloque) {
-        getFilteredLocaciones(`AREA eq '${obira.Bloque}'`);
+        const bloqueTitle = typeof obira.Bloque === 'object' ? obira.Bloque.Title : obira.Bloque;
+        getFilteredLocaciones(`AREA eq '${bloqueTitle}'`);
       }
       if (obira.Etapa) {
         const provider = isAdmin || isConsultor ? proveedorNombreDecodificado : group;
@@ -700,7 +692,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
     const loadChoiceFields = async () => {
       try {
         if (listasAsociadas.obiras) {
-          const obiraDataSource = new ObiraDataSource(listasAsociadas.obiras);
+          const obiraDataSource = createObiraDataSource(listasAsociadas.obiras);
           const choiceFields = await obiraDataSource.getChoiceFields();
 
           setDropdownOptions((prev) => ({
@@ -762,7 +754,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
 
   React.useEffect(() => {
     (async () => {
-      const LocacionesDataSource = new LocacionDatasource(Lista.Locaciones);
+      const LocacionesDataSource = createLocacionDataSource(Lista.Locaciones);
       const locaciones: Locacion[] = await LocacionesDataSource.getItems();
       if (locaciones && locaciones.length > 0) {
         setDropdownOptions((prev) => ({
@@ -953,7 +945,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
       const anormalidadesEliminadas = anormalidadesData.filter((a) => a.deleted && a.Id);
       const accionesEliminadas = accionesData.filter((a) => a.deleted && a.Id);
       if (anormalidadesEliminadas.length > 0) {
-        const gestionAnormalidadDataSource = new GestionAnormalidadDataSource(
+        const gestionAnormalidadDataSource = createGestionAnormalidadDataSource(
           listasAsociadas.gestiones
         );
         for (const anormalidad of anormalidadesEliminadas) {
@@ -961,7 +953,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
         }
       }
       if (accionesEliminadas.length > 0) {
-        const accionDatasource = new AccionDatasource(listasAsociadas.acciones);
+        const accionDatasource = createAccionDataSource(listasAsociadas.acciones);
         for (const accion of accionesEliminadas) {
           await accionDatasource.delete(accion.Id);
         }
@@ -973,7 +965,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
         (a) => !a.deleted && a.Id && a.Files && a.Files.some((f) => f.deleted)
       );
       if (anormalidadesConAdjuntosAEliminar.length > 0) {
-        const gestionAnormalidadDataSource = new GestionAnormalidadDataSource(
+        const gestionAnormalidadDataSource = createGestionAnormalidadDataSource(
           listasAsociadas.gestiones
         );
         for (const anormalidad of anormalidadesConAdjuntosAEliminar) {
@@ -1001,7 +993,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
         (a) => !a.deleted && a.Id && a.Files && a.Files.some((f) => f.deleted)
       );
       if (accionesConAdjuntosAEliminar.length > 0) {
-        const accionDatasource = new AccionDatasource(listasAsociadas.acciones);
+        const accionDatasource = createAccionDataSource(listasAsociadas.acciones);
         for (const accion of accionesConAdjuntosAEliminar) {
           const filesToDelete = accion.Files.filter((f) => f.deleted);
           const fileNames = filesToDelete
@@ -1026,7 +1018,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
       let anormalidadesIds = [];
       let anormalidadesGuardadas = [];
       if (anormalidadesNuevas.length > 0) {
-        const gestionAnormalidadDataSource = new GestionAnormalidadDataSource(
+        const gestionAnormalidadDataSource = createGestionAnormalidadDataSource(
           listasAsociadas.gestiones
         );
         const nuevasAnormalidades = anormalidadesNuevas.map(
@@ -1063,7 +1055,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
         (a) => !a.added && !a.deleted && a.modified
       );
       if (anormalidadesEditadas.length > 0) {
-        const gestionAnormalidadDataSource = new GestionAnormalidadDataSource(
+        const gestionAnormalidadDataSource = createGestionAnormalidadDataSource(
           listasAsociadas.gestiones
         );
         const anormalidadesToUpdate = anormalidadesEditadas.map(
@@ -1081,7 +1073,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
         (a) => !a.added && !a.deleted && a.modified
       );
       if (accionesEditadas.length > 0) {
-        const accionDatasource = new AccionDatasource(listasAsociadas.acciones);
+        const accionDatasource = createAccionDataSource(listasAsociadas.acciones);
         const accionesToUpdate = accionesEditadas.map(
           (accion) =>
             new Accion({
@@ -1101,7 +1093,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
       }
 
       if (accionesNuevas.length > 0) {
-        const accionDatasource = new AccionDatasource(listasAsociadas.acciones);
+        const accionDatasource = createAccionDataSource(listasAsociadas.acciones);
         for (const accion of accionesNuevas) {
           const nueva = new Accion({
             ...accion,
@@ -1194,7 +1186,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
       const fechaCierreStr =
         formData.EstadoGeneral === ESTADO_GENERAL_CERRADO ? moment().toISOString() : null;
 
-      const obiraDataSource = new ObiraDataSource(listasAsociadas.obiras);
+      const obiraDataSource = createObiraDataSource(listasAsociadas.obiras);
       const obiraToList = new Obira({
         Id: obira.Id,
         ...formData,
@@ -1390,7 +1382,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
     const loadAnormalidadChoiceFields = async () => {
       try {
         if (listasAsociadas.gestiones) {
-          const gestionAnormalidadDataSource = new GestionAnormalidadDataSource(
+          const gestionAnormalidadDataSource = createGestionAnormalidadDataSource(
             listasAsociadas.gestiones
           );
           const choiceFields = await gestionAnormalidadDataSource.getChoiceFields();
@@ -1416,7 +1408,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
     const loadAccionDefinitivaChoiceFields = async () => {
       try {
         if (listasAsociadas.acciones) {
-          const accionDefinitivaDataSource = new AccionDefinitivaDataSource(
+          const accionDefinitivaDataSource = createAccionDefinitivaDataSource(
             listasAsociadas.acciones
           );
           const choiceFields = await accionDefinitivaDataSource.getChoiceFields();
@@ -1685,7 +1677,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
                 <TagPicker
                   onResolveSuggestions={async (filter, tagList) => {
                     if (!filter || filter.length < 3) return [];
-                    const ds = new LocacionDataSource(Lista.Locaciones);
+                    const ds = createLocacionDataSource(Lista.Locaciones);
                     const locaciones = await ds.getFilteredItems(
                       `substringof('${filter}', Title) and AREA eq '${formData.Bloque.Title}'`
                     );
@@ -1954,7 +1946,7 @@ const Formulario: React.FC<IObirasProps> = (props) => {
                 <TagPicker
                   onResolveSuggestions={async (filter, selectedItems) => {
                     if (!filter || filter.length < 1) return [];
-                    const ds = new EtiquetaDataSource(Lista.Etiquetas);
+                    const ds = createEtiquetaDataSource(Lista.Etiquetas);
                     const etapa = formData.Etapa;
                     const etiquetas = await ds.getFilteredItems(
                       `(substringof('${filter}', Title)) and (Etapa eq null or Etapa eq '${etapa}')`

@@ -27,7 +27,6 @@ import {
   Locacion,
 } from "../../../../../../core";
 import { Lista } from "../../../../../../core/utils/Constants";
-import ObiraDataSource from "../../../../../../core/api/Obira/ObiraDataSource";
 import { IDropdownOptionObira, IObiraSectionProps } from "./types";
 import styles from "../FormAdd.module.scss";
 import { useUserContext } from "../../../../../../core/context/UserContext";
@@ -39,8 +38,7 @@ import { IFileAdd } from "../../Formulario";
 import { datePickerStrings, formatDate } from "../../../../../../core/utils/dateUtils";
 import { IForm } from "../../IFormulario";
 import { ETAPAS_CON_EQUIPO } from "../../../../../../core/utils/Constants";
-import LocacionDatasource from "../../../../../../core/api/Locacion/LocacionDataSource";
-import EtiquetaDataSource from "../../../../../../core/api/Etiqueta/EtiquetaDataSource";
+import { createLocacionDataSource, createEtiquetaDataSource, createObiraDataSource } from "../../../../../../core/api/factory";
 import { FechaRepeticionList } from "../FechaRepeticionField";
 import { PeoplePicker, PrincipalType } from "@pnp/spfx-controls-react/lib/PeoplePicker";
 
@@ -117,11 +115,9 @@ export const ObiraSection: React.FC<IObiraSectionProps> = ({
   React.useEffect(() => {
     const loadChoiceFields = async () => {
       try {
-        if (!listasAsociadas || !listasAsociadas.obiras) {
-          return;
-        }
-
-        const obiraDataSource = new ObiraDataSource(listasAsociadas.obiras);
+        // En modo mock, cargar siempre los choice fields
+        // En modo real, necesita listasAsociadas.obiras
+        const obiraDataSource = createObiraDataSource(listasAsociadas?.obiras || '');
         const choiceFields = await obiraDataSource.getChoiceFields();
 
         setDropdownOptions((prev) => ({
@@ -210,7 +206,7 @@ export const ObiraSection: React.FC<IObiraSectionProps> = ({
   }, [obiraId, listasAsociadas]);
 
   const uploadFiles = async (listTitle: string, adjuntos: IFileAdd[], itemId: number) => {
-    const obiraDataSource = new ObiraDataSource(listTitle);
+    const obiraDataSource = createObiraDataSource(listTitle);
     const filteredFiles = adjuntos
       .filter((file) => !file.deleted)
       .map((file) => file.file);
@@ -251,7 +247,7 @@ export const ObiraSection: React.FC<IObiraSectionProps> = ({
   }, [bloqueSeleccionado]);
 
   React.useEffect(() => {
-    const LocacionesDataSource = new LocacionDatasource(Lista.Locaciones, ["Id", "Title", "AREA"]);
+    const LocacionesDataSource = createLocacionDataSource(Lista.Locaciones);
     (
       async () => {
         try {
@@ -369,7 +365,7 @@ export const ObiraSection: React.FC<IObiraSectionProps> = ({
     if (!obiraData.Etiquetas || obiraData.Etiquetas.length === 0) return;
     if (obiraData.Etiquetas.some((et) => et.Etapa === undefined)) {
       (async () => {
-        const ds = new EtiquetaDataSource(Lista.Etiquetas);
+        const ds = createEtiquetaDataSource(Lista.Etiquetas);
         const ids = obiraData.Etiquetas.map((et) => et.Id);
         const filterStr = ids.map((id) => `Id eq ${id}`).join(" or ");
         const etiquetasFull = await ds.getFilteredItems(filterStr);
@@ -705,7 +701,7 @@ export const ObiraSection: React.FC<IObiraSectionProps> = ({
               disabled={!hayEtapaSeleccionada}
               onResolveSuggestions={async (filter, tagList) => {
                 if (!filter || filter.length < 1) return [];
-                const ds = new EtiquetaDataSource(Lista.Etiquetas);
+                const ds = createEtiquetaDataSource(Lista.Etiquetas);
                 let etapa = obiraData.Etapa ? obiraData.Etapa.replace("'", "''") : "";
                 const filterStr = `substringof('${filter}', Title) and (Etapa eq null or Etapa eq '' or Etapa eq '${etapa}')`;
                 const etiquetas = await ds.getFilteredItems(filterStr);
@@ -727,7 +723,7 @@ export const ObiraSection: React.FC<IObiraSectionProps> = ({
                   setObiraData((prev) => ({ ...prev, Etiquetas: [] }));
                   return;
                 }
-                const ds = new EtiquetaDataSource(Lista.Etiquetas);
+                const ds = createEtiquetaDataSource(Lista.Etiquetas);
                 const ids = tags.map((t) => Number(t.key));
                 const filterStr = ids.map((id) => `Id eq ${id}`).join(" or ");
                 const etiquetasFull = await ds.getFilteredItems(filterStr);
